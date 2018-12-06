@@ -1,0 +1,135 @@
+import numpy as np
+from PIL import Image
+import keras
+from keras.preprocessing import image
+from keras.models import load_model
+from keras.datasets import mnist
+from keras.utils import to_categorical
+from django.conf import settings
+from keras import backend as K
+import os
+import cv2
+
+from keras.models import Sequential,Input,Model
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras.layers.normalization import BatchNormalization
+from keras.layers.advanced_activations import LeakyReLU
+
+import tensorflow as tf
+
+from keras.utils import to_categorical
+
+def predict(img_path):
+    jpgPath = savePngToJpg(img_path)
+    # resizedPath = resizeImage(jpgPath, 28, 28)
+    # print(jpgPath)
+
+    img = image.load_img(jpgPath, target_size=(28, 28), color_mode='grayscale')
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    x = x / 255.
+
+    model = load_model(settings.KERAS_MODEL_PATH)
+    model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
+
+    pred = model.predict(x);
+    new_predict = np.argmax(np.round(pred),axis=1)
+    print(new_predict)
+    K.clear_session()
+    return new_predict[0]
+
+
+def savePngToJpg(image_path):
+    png = Image.open(image_path)
+    png.load()
+    background = Image.new("RGB", png.size, (255, 255, 255))
+    background.paste(png, mask=png.split()[3]) # 3 is the alpha channel
+
+    path, filename = os.path.split(os.path.abspath(image_path))
+    finalPath = os.path.join(path, filename.replace('.png', '.jpg'))
+
+    background.save(finalPath, 'JPEG', quality=80)
+    return finalPath;
+
+def resizeImage(imagePath, width, height):
+    img = cv2.imread(imagePath)
+    path, filename = os.path.split(os.path.abspath(imagePath))
+    newFileName = filename.replace('.jpg', '-28x28.jpg')
+    img = cv2.resize(img, (width, height))
+    resizedPath = os.path.join(path, newFileName);
+    cv2.imwrite(resizedPath, img)
+    return resizedPath
+
+def train_model():
+    from keras.datasets import mnist
+    (train_X,train_Y), (test_X,test_Y) = mnist.load_data()
+
+    classes = np.unique(train_Y)
+    nClasses = len(classes)
+
+    train_X = train_X.reshape(-1, 28,28, 1)
+    test_X = test_X.reshape(-1, 28,28, 1)
+
+    train_X = train_X.astype('float32')
+    test_X = test_X.astype('float32')
+    train_X = train_X / 255.
+    test_X = test_X / 255.
+
+    train_Y_one_hot = to_categorical(train_Y)
+    test_Y_one_hot = to_categorical(test_Y)
+
+    from sklearn.model_selection import train_test_split
+    train_X,valid_X,train_label,valid_label = train_test_split(train_X, train_Y_one_hot, test_size=0.2, random_state=13)
+
+    batch_size = 64
+    epochs = 20
+    num_classes = 10
+
+    model = Sequential()
+    model.add(Conv2D(32, kernel_size=(3, 3),activation='linear',padding='same',input_shape=(28,28,1)))
+    model.add(LeakyReLU(alpha=0.1))
+    model.add(MaxPooling2D((2, 2),padding='same'))
+    model.add(Dropout(0.25))
+    model.add(Conv2D(64, (3, 3), activation='linear',padding='same'))
+    model.add(LeakyReLU(alpha=0.1))
+    model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
+    model.add(Dropout(0.25))
+    model.add(Conv2D(128, (3, 3), activation='linear',padding='same'))
+    model.add(LeakyReLU(alpha=0.1))
+    model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
+    model.add(Dropout(0.4))
+    model.add(Flatten())
+    model.add(Dense(128, activation='linear'))
+    model.add(LeakyReLU(alpha=0.1))
+    model.add(Dropout(0.3))
+    model.add(Dense(num_classes, activation='softmax'))
+
+    model.summary()
+
+    model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
+
+    train_dropout = model.fit(train_X, train_label, batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(valid_X, valid_label))
+
+    test_eval = model.evaluate(test_X, test_Y_one_hot, verbose=1)
+
+    print('Test loss:', test_eval[0])
+    print('Test accuracy:', test_eval[1])
+
+    predicted_classes = model.predict(test_X)
+    predicted_classes = np.argmax(np.round(predicted_classes),axis=1)
+    print(predicted_classes.shape, test_Y.shape)
+
+    correct = np.where(predicted_classes==test_Y)[0]
+    print("Found " + str(len(correct)) + " correct labels")
+
+    incorrect = np.where(predicted_classes!=test_Y)[0]
+    print ("Found " + str(len(incorrect)) + " incorrect labels ")
+
+    from sklearn.metrics import classification_report
+    target_names = ["Class {}".format(i) for i in range(num_classes)]
+    print(classification_report(test_Y, predicted_classes, target_names=target_names))
+
+    # SAVE MODEL
+    model.save(settings.KERAS_MODEL_PATH)
+
