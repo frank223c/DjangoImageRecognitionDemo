@@ -1,12 +1,19 @@
+# Reconocimiento de digitos escritos a mano con tensorflow
 
-Requerimientos:
-- Python 3.x
+## Para empezar:
 
-Instalar las siguientes librerias
+### Prerequisitos
 
-pip install numpy scipy matplotlib
-pip install keras
-pip install -U scikit-learn
-pip install h5py
-pip install pillow
-pip install opencv-python
+* Python 3.x
+
+### Instalar los siguientes modulos con pip
+* pip install numpy scipy matplotlib
+* pip install keras
+* pip install -U scikit-learn
+* pip install h5py
+* pip install pillow
+* pip install opencv-python
+
+
+
+
