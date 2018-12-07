@@ -43,6 +43,6 @@ def predict_image(request):
 
 def train(request):
     train_model()
-    return render(request, 'index.html')
+    return HttpResponseRedirect(reverse('digits:index'))
 
 

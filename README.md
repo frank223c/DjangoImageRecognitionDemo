@@ -13,7 +13,7 @@ Poner la carpeta de instalación y la carpeta de Scripts en las variables de ent
 ### Instalar los siguientes modulos con pip
 * pip install django
 * pip install numpy scipy matplotlib
-*
+* pip install tensorflow
 * pip install keras
 * pip install scikit-learn
 * pip install h5py
