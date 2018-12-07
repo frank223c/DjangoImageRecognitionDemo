@@ -47,14 +47,20 @@ def savePngToJpg(image_path):
         png.close()
         return image_path
 
-    png.load()
-    background = Image.new("RGB", png.size, (255, 255, 255))
-    background.paste(png, mask=png.split()[3])  # 3 is the alpha channel
-
     path, filename = os.path.split(os.path.abspath(image_path))
     finalPath = os.path.join(path, filename.replace('.png', '.jpg'))
 
-    background.save(finalPath, 'JPEG', quality=90)
+    png.load()
+    if len(png.split()) > 3:
+        background = Image.new("RGB", png.size, (255, 255, 255))
+        background.paste(png, mask=png.split()[3])  # 3 is the alpha channel
+        
+        background.save(finalPath, 'JPEG', quality=90)
+    else:
+        im = Image.open(image_path)
+        rgb_im = im.convert('RGB')
+        rgb_im.save(finalPath)
+
     png.close();
     return finalPath;
 
