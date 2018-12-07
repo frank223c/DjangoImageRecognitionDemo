@@ -15,58 +15,29 @@
         <div class="card-body">
             <h5 class="card-title">Escriba un dígito para identificar</h5>
 
-                    
 
-                    
+
+
                                    <h3 id="resultado">Resultado: </h3>
                     <div id="sketch" style="width:200px; height: 200px; border: 1px solid black;">
                     <canvas id="paint"></canvas>
-                    </div>     
-                    
-                    
-    
+                    </div>
+
+
+
                 <a href="/digits/train">Train me</a>
 
-                
 
 
-           
+
+
             <button class="btn btn-danger clear-canvas" type="button">Limpiar</button>
             <button class="btn btn-primary" type="button" id="submit-image">Enviar</button>
-           
+
         </div>
     </div>
-    
-
-                            
-
-                    
-
-<hr>
-  <form action="/digits/predict_uploaded_image" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="image">
-    <button type="submit">Upload</button>
-  </form>
 
 
-{% for message in messages %}
-    <span class="{{ message.tags }}">
-    {% if 'result' in message.tags %}
-        <p>Resultado: {{ message }}</p>
-    {% endif %}
-    </span>
-{% endfor %}
-
-  {% if uploaded_file_url %}
-    <img src="{{ uploaded_file_url }}" alt="">
-  {% endif %}
-
-  {% if result %}
-    <p>{{ result }}</p>
-  {% endif %}
-
-{% load staticfiles %}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
 <script>

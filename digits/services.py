@@ -90,33 +90,27 @@ def train_model():
     from sklearn.model_selection import train_test_split
     train_X,valid_X,train_label,valid_label = train_test_split(train_X, train_Y_one_hot, test_size=0.2, random_state=13)
 
-    batch_size = 128
-    num_classes = 10
-    epochs = 12
-
-    # PRIMERA VERSION
-    model = Sequential()
-    model.add(Conv2D(32, kernel_size=(3, 3),
-                     activation='relu',
-                     input_shape=(28,28,1)))
-    model.add(Conv2D(64, (3, 3), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(128, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(num_classes, activation='softmax'))
-
-
-
-
-
-
-
+    # batch_size = 128
+    # num_classes = 10
+    # epochs = 12
 
     batch_size = 64
     epochs = 20
     num_classes = 10
+
+    # # PRIMERA VERSION
+    # model = Sequential()
+    # model.add(Conv2D(32, kernel_size=(3, 3),
+    #                  activation='relu',
+    #                  input_shape=(28,28,1)))
+    # model.add(Conv2D(64, (3, 3), activation='relu'))
+    # model.add(MaxPooling2D(pool_size=(2, 2)))
+    # model.add(Dropout(0.25))
+    # model.add(Flatten())
+    # model.add(Dense(128, activation='relu'))
+    # model.add(Dropout(0.5))
+    # model.add(Dense(num_classes, activation='softmax'))
+
 
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3),activation='linear',padding='same',input_shape=(28,28,1)))
