@@ -45,4 +45,18 @@ def train(request):
     train_model()
     return HttpResponseRedirect(reverse('digits:index'))
 
+def predict_uploaded_image(request):
+    context = {}
+    if request.method == 'POST' and request.FILES['image']:
+        myfile = request.FILES['image']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        img_path = os.path.join(settings.MEDIA_ROOT, filename)
+        result = predict(img_path)
+        messages.add_message(request, messages.INFO, str(result), extra_tags='result')
+        messages.add_message(request, messages.SUCCESS, uploaded_file_url)
+        return HttpResponseRedirect(reverse('digits:index'))
+
+    return render(request, 'index.html', context)
 

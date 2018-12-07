@@ -43,14 +43,19 @@ def predict(img_path):
 
 def savePngToJpg(image_path):
     png = Image.open(image_path)
+    if (png.format == 'JPEG'):
+        png.close()
+        return image_path
+
     png.load()
     background = Image.new("RGB", png.size, (255, 255, 255))
-    background.paste(png, mask=png.split()[3]) # 3 is the alpha channel
+    background.paste(png, mask=png.split()[3])  # 3 is the alpha channel
 
     path, filename = os.path.split(os.path.abspath(image_path))
     finalPath = os.path.join(path, filename.replace('.png', '.jpg'))
 
-    background.save(finalPath, 'JPEG', quality=80)
+    background.save(finalPath, 'JPEG', quality=90)
+    png.close();
     return finalPath;
 
 def resizeImage(imagePath, width, height):
@@ -69,6 +74,8 @@ def train_model():
     classes = np.unique(train_Y)
     nClasses = len(classes)
 
+    print(classes, nClasses)
+
     train_X = train_X.reshape(-1, 28,28, 1)
     test_X = test_X.reshape(-1, 28,28, 1)
 
@@ -83,14 +90,11 @@ def train_model():
     from sklearn.model_selection import train_test_split
     train_X,valid_X,train_label,valid_label = train_test_split(train_X, train_Y_one_hot, test_size=0.2, random_state=13)
 
-    # batch_size = 64
-    # epochs = 20
-    # num_classes = 10
     batch_size = 128
     num_classes = 10
     epochs = 12
 
-    #PRIMERA VERSION
+    # PRIMERA VERSION
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3),
                      activation='relu',
@@ -103,39 +107,35 @@ def train_model():
     model.add(Dropout(0.5))
     model.add(Dense(num_classes, activation='softmax'))
 
-    # model = Sequential()
-    # model.add(Conv2D(32, kernel_size=(3, 3),activation='linear',input_shape=(28,28,1),padding='same'))
-    # model.add(LeakyReLU(alpha=0.1))
-    # model.add(MaxPooling2D((2, 2),padding='same'))
-    # model.add(Conv2D(64, (3, 3), activation='linear',padding='same'))
-    # model.add(LeakyReLU(alpha=0.1))
-    # model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
-    # model.add(Conv2D(128, (3, 3), activation='linear',padding='same'))
-    # model.add(LeakyReLU(alpha=0.1))
-    # model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
-    # model.add(Flatten())
-    # model.add(Dense(128, activation='linear'))
-    # model.add(LeakyReLU(alpha=0.1))
-    # model.add(Dense(num_classes, activation='softmax'))
 
-    # model = Sequential()
-    # model.add(Conv2D(32, kernel_size=(3, 3),activation='linear',padding='same',input_shape=(28,28,1)))
-    # model.add(LeakyReLU(alpha=0.1))
-    # model.add(MaxPooling2D((2, 2),padding='same'))
-    # model.add(Dropout(0.25))
-    # model.add(Conv2D(64, (3, 3), activation='linear',padding='same'))
-    # model.add(LeakyReLU(alpha=0.1))
-    # model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
-    # model.add(Dropout(0.25))
-    # model.add(Conv2D(128, (3, 3), activation='linear',padding='same'))
-    # model.add(LeakyReLU(alpha=0.1))
-    # model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
-    # model.add(Dropout(0.4))
-    # model.add(Flatten())
-    # model.add(Dense(128, activation='linear'))
-    # model.add(LeakyReLU(alpha=0.1))
-    # model.add(Dropout(0.3))
-    # model.add(Dense(num_classes, activation='softmax'))
+
+
+
+
+
+
+    batch_size = 64
+    epochs = 20
+    num_classes = 10
+
+    model = Sequential()
+    model.add(Conv2D(32, kernel_size=(3, 3),activation='linear',padding='same',input_shape=(28,28,1)))
+    model.add(LeakyReLU(alpha=0.1))
+    model.add(MaxPooling2D((2, 2),padding='same'))
+    model.add(Dropout(0.25))
+    model.add(Conv2D(64, (3, 3), activation='linear',padding='same'))
+    model.add(LeakyReLU(alpha=0.1))
+    model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
+    model.add(Dropout(0.25))
+    model.add(Conv2D(128, (3, 3), activation='linear',padding='same'))
+    model.add(LeakyReLU(alpha=0.1))
+    model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
+    model.add(Dropout(0.4))
+    model.add(Flatten())
+    model.add(Dense(128, activation='linear'))
+    model.add(LeakyReLU(alpha=0.1))
+    model.add(Dropout(0.3))
+    model.add(Dense(num_classes, activation='softmax'))
 
     model.summary()
 
