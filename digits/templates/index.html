@@ -24,23 +24,38 @@
 
            <div style="margin: 10px">
                 <div style="align-content: center;">
-                    <button style="padding: 10px" class="btn btn-danger clear-canvas" type="button"> Limpiar </button>
+                <a  style="padding: 10px" class="btn btn-warning" href="/digits/train"> Entrenar </a>
+                <button style="padding: 10px" class="btn btn-danger clear-canvas" type="button"> Limpiar </button>
                 <button style="padding: 10px" class="btn btn-primary" type="button" id="submit-image"> Procesar </button>
                 </div>
            </div>
         </div>
     </div>
 
-    <div style="float: right;">
-        <a class="btn btn-warning" href="/digits/train"> Entrenar </a>
+    <div>
+        <div style="float: left;">
+        <h5>Seleccione una imagen para procesar</h5>
+            <form action="/digits/predict_uploaded_image" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="custom-file">
+              <input type="file" name="image" class="custom-file-input" id="customFileLang" lang="es">
+              <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+              <button class="btn btn-secondary" type="submit">Subir</button>
+            </div>
+
+
+            <!-- <input type="file" name="image">
+            <button type="submit">Upload</button>-->
+            
+            </form>
+        </div>
+        <div style="float: right;">
+            
+        </div>
     </div>
 
-    <hr>
-  <form action="/digits/predict_uploaded_image" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="image">
-    <button type="submit">Upload</button>
-  </form>
+  
 
 
 {% for message in messages %}
