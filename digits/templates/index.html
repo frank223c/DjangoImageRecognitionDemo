@@ -10,12 +10,10 @@
 <body class="container">
 
 
-    <div class="text-center">
+    <div class="text-center" style="padding: 20px">
         <h5 class="card-header">RECONOCIMIENTO DE DÍGITOS</h5>
         <div class="card-body">
             <h5 class="card-title">Escriba un dígito para identificar</h5>
-
-
 
 
                                    <h3 id="resultado">Resultado: </h3>
@@ -38,6 +36,27 @@
     </div>
 
 
+            <h3 id="resultado">Resultado: </h3>
+            <div style="padding-left: 41%">
+                <div id="sketch" style="width:200px; height: 200px; border: 1px solid black;">
+                    <canvas id="paint"></canvas>
+                </div>
+            </div>
+
+           <div style="margin: 10px">
+                <div style="align-content: center;">
+                    <button style="padding: 10px" class="btn btn-danger clear-canvas" type="button"> Limpiar </button>
+                <button style="padding: 10px" class="btn btn-primary" type="button" id="submit-image"> Procesar </button>
+                </div>
+           </div>
+        </div>
+    </div>
+
+    <div style="float: right;">
+        <a class="btn btn-warning" href="/digits/train"> Entrenar </a>
+    </div>
+
+{% load staticfiles %}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
 <script>
