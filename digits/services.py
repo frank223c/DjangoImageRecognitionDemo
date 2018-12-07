@@ -16,9 +16,13 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers.normalization import BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU
 
-import tensorflow as tf
+# import tensorflow as tf
 
 from keras.utils import to_categorical
+
+def load_keras_model():
+    global model
+
 
 def predict(img_path):
     jpgPath = savePngToJpg(img_path)
@@ -32,9 +36,7 @@ def predict(img_path):
 
     model = load_model(settings.KERAS_MODEL_PATH)
     model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
-
     pred = model.predict(x);
-    print(pred)
     new_predict = np.argmax(np.round(pred),axis=1)
     print(new_predict)
     K.clear_session()
@@ -116,6 +118,13 @@ def train_model():
 
     print('Test loss:', test_eval[0])
     print('Test accuracy:', test_eval[1])
+
+    accuracy = train_dropout.history['acc']
+    val_accuracy = train_dropout.history['val_acc']
+    loss = train_dropout.history['loss']
+    val_loss = train_dropout.history['val_loss']
+    print(accuracy)
+    print(val_accuracy)
 
     predicted_classes = model.predict(test_X)
     predicted_classes = np.argmax(np.round(predicted_classes),axis=1)

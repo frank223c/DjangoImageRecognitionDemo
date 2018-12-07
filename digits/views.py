@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from .services import predict
-from .services import train_model
+from .services import train_model, load_keras_model
 from django.templatetags.static import static
 import os
 from django.conf import settings
@@ -14,8 +14,8 @@ import base64
 from django.http import JsonResponse
 
 def index(request):
-    context = {'result': 'asd'}
-    return render(request, 'index.html', context);
+    load_keras_model();
+    return render(request, 'index.html');
 
 def post_test(request):
     test = request.POST['test'];

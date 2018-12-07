@@ -11,7 +11,9 @@ Demo para reconocimiento de digitos escritos a mano usando Python, Keras Tensorf
 Poner la carpeta de instalación y la carpeta de Scripts en las variables de entorno del sistema
 
 ### Instalar los siguientes modulos con pip
+* pip install django
 * pip install numpy scipy matplotlib
+*
 * pip install keras
 * pip install scikit-learn
 * pip install h5py
