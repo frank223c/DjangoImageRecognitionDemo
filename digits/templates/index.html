@@ -76,6 +76,8 @@
     clear.addEventListener('click', function(e) {
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
+        var p = document.querySelector('#resultado');
+            p.innerHTML = "Resultado: ";
     });
 
     var submit = document.querySelector('#submit-image');

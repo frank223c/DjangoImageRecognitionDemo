@@ -6,14 +6,20 @@ Demo para reconocimiento de digitos escritos a mano usando Python, Keras Tensorf
 
 ### Prerequisitos
 
-* Python 3.x
+* Python 3.x <= 3.6
+
+Poner la carpeta de instalación y la carpeta de Scripts en las variables de entorno del sistema
 
 ### Instalar los siguientes modulos con pip
 * pip install numpy scipy matplotlib
 * pip install keras
-* pip install -U scikit-learn
+* pip install scikit-learn
 * pip install h5py
 * pip install pillow
 * pip install opencv-python
 
+### Correr la aplicación
+python manage.py runserver
 
+### Entrar a aplicación
+http://localhost:8000/digits/

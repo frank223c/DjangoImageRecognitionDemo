@@ -34,6 +34,7 @@ def predict(img_path):
     model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
 
     pred = model.predict(x);
+    print(pred)
     new_predict = np.argmax(np.round(pred),axis=1)
     print(new_predict)
     K.clear_session()
@@ -76,7 +77,7 @@ def train_model():
     train_X = train_X / 255.
     test_X = test_X / 255.
 
-    train_Y_one_hot = to_categorical(train_Y)
+    train_Y_one_hot = to_categorical(train_Y) # [0 0 0 0 0 1 0 0 0 0]
     test_Y_one_hot = to_categorical(test_Y)
 
     from sklearn.model_selection import train_test_split
