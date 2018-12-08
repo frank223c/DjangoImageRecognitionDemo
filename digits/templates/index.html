@@ -31,48 +31,37 @@
            </div>
         </div>
     </div>
+<hr>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h5>Seleccione una imagen para procesar</h5>
+        </div>
+        <div class="col-md-12 text-center">
 
-    <div>
-        <div style="float: left;">
-        <h5>Seleccione una imagen para procesar</h5>
             <form action="/digits/predict_uploaded_image" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="custom-file">
-              <input type="file" name="image" class="custom-file-input" id="customFileLang" lang="es">
-              <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
-              <button class="btn btn-secondary" type="submit">Subir</button>
-            </div>
-
-
-            <!-- <input type="file" name="image">
-            <button type="submit">Upload</button>-->
-            
+                {% csrf_token %}
+                <div class="form-group col-md-12">
+                    <input type="file" name="image">
+                </div>
+                <div class="col-md-12">
+                    <button style="width: 40%" class="btn btn-secondary" type="submit">Subir</button>
+                </div>
             </form>
         </div>
-        <div style="float: right;">
-            
+        <div class="col-md-12 text-center">
+            {% for message in messages %}
+                <span class="{{ message.tags }}">
+                {% if 'result' in message.tags %}
+                    <h3 id="resultado">Resultado: {{ message }}</h3>
+                {% endif %}
+                </span>
+            {% endfor %}
         </div>
     </div>
 
-  
 
 
-{% for message in messages %}
-    <span class="{{ message.tags }}">
-    {% if 'result' in message.tags %}
-        <p>Resultado: {{ message }}</p>
-    {% endif %}
-    </span>
-{% endfor %}
 
-  {% if uploaded_file_url %}
-    <img src="{{ uploaded_file_url }}" alt="">
-  {% endif %}
-
-  {% if result %}
-    <p>{{ result }}</p>
-  {% endif %}
 
 {% load staticfiles %}
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

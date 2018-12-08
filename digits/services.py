@@ -24,10 +24,10 @@ def load_keras_model():
 
 def predict(img_path):
     jpgPath = savePngToJpg(img_path)
-    # resizedPath = resizeImage(jpgPath, 28, 28)
-    # print(jpgPath)
+    resizedPath = resizeImage(jpgPath, 28, 28)
+    print(jpgPath)
 
-    img = image.load_img(jpgPath, target_size=(28, 28), color_mode='grayscale')
+    img = image.load_img(resizedPath, target_size=(28, 28), color_mode='grayscale')
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
     x = x / 255.
@@ -54,7 +54,7 @@ def savePngToJpg(image_path):
     if len(png.split()) > 3:
         background = Image.new("RGB", png.size, (255, 255, 255))
         background.paste(png, mask=png.split()[3])  # 3 is the alpha channel
-        
+
         background.save(finalPath, 'JPEG', quality=90)
     else:
         im = Image.open(image_path)
