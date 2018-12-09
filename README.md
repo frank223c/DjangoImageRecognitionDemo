@@ -1,6 +1,7 @@
 # Reconocimiento de digitos escritos a mano con tensorflow
 
 Demo para reconocimiento de digitos escritos a mano usando redes neuronales convolucionales para el curso de Inteligencia Artificial UPC / EPE.
+
 Las herramientas que se utlizaron son: Python, Keras Tensorflow y Django.
 
 Para el entrenamiento de la red neuronal se utilizó el conjunto de datos de Mnist de digitos escritos a mano.
