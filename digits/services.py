@@ -17,23 +17,34 @@ from keras.layers.normalization import BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU
 
 from keras.utils import to_categorical
-
-def load_keras_model():
-    global model
-
+from keras.models import model_from_json
 
 def predict(img_path):
     jpgPath = savePngToJpg(img_path)
-    resizedPath = resizeImage(jpgPath, 28, 28)
-    print(jpgPath)
 
-    img = image.load_img(resizedPath, target_size=(28, 28), color_mode='grayscale')
+    img = image.load_img(jpgPath, target_size=(28, 28), color_mode='grayscale')
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
-    x = x / 255.
+    x = (255-x) / 255.
 
-    model = load_model(settings.KERAS_MODEL_PATH)
-    model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
+    model = None
+
+    # SE CAMBIO A CARGAR MODELO POR JSON POR EFICIENCIA AL PREDECIR
+    keras_path = settings.KERAS_MODEL_ROOT
+    with open(keras_path + "model.json") as json_model:
+        model = model_from_json(json_model.read())
+        json_model.close()
+
+        model.load_weights(keras_path + "model.weights")
+        model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
+
+    if (model == None):
+        return -1
+
+
+    # model = load_model(settings.KERAS_MODEL_PATH)
+    # model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
+
     pred = model.predict(x);
     new_predict = np.argmax(np.round(pred),axis=1)
     print(new_predict)
@@ -51,6 +62,7 @@ def savePngToJpg(image_path):
     finalPath = os.path.join(path, filename.replace('.png', '.jpg'))
 
     png.load()
+
     if len(png.split()) > 3:
         background = Image.new("RGB", png.size, (255, 255, 255))
         background.paste(png, mask=png.split()[3])  # 3 is the alpha channel
@@ -64,14 +76,6 @@ def savePngToJpg(image_path):
     png.close();
     return finalPath;
 
-def resizeImage(imagePath, width, height):
-    img = cv2.imread(imagePath)
-    path, filename = os.path.split(os.path.abspath(imagePath))
-    newFileName = filename.replace('.jpg', '-28x28.jpg')
-    img = cv2.resize(img, (width, height))
-    resizedPath = os.path.join(path, newFileName);
-    cv2.imwrite(resizedPath, img)
-    return resizedPath
 
 def train_model():
     from keras.datasets import mnist
@@ -170,5 +174,10 @@ def train_model():
     print(classification_report(test_Y, predicted_classes, target_names=target_names))
 
     # SAVE MODEL
-    model.save(settings.KERAS_MODEL_PATH)
+    keras_path = settings.KERAS_MODEL_ROOT
+    model.save_weights(keras_path + "model.weights")
+    with open(keras_path + "model.json", "w") as json_file:
+        model_json = model.to_json()
+        json_file.write(model_json)
+    # model.save(settings.KERAS_MODEL_PATH)
 

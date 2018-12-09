@@ -130,3 +130,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 KERAS_MODEL_PATH = BASE_DIR + '\\digits\\keras_model\\model.h5py'
+KERAS_MODEL_ROOT = BASE_DIR + '\\digits\\keras_model\\'

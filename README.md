@@ -33,3 +33,6 @@ Ahi se presentan las opciones de Entrenar (20 min +), reconocer una imagen de un
 
 ### RED NEURONAL
 El codigo donde se crea y gestiona la red neuronal esta en digits/services.py
+
+### MISC.
+* Al momento de realizar entrenamiento la información sobre este se muestra en la consola

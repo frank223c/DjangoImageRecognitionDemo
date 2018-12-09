@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib import messages
 from .services import predict
-from .services import train_model, load_keras_model
+from .services import train_model
 from django.templatetags.static import static
 import os
 from django.conf import settings
@@ -14,14 +14,7 @@ import base64
 from django.http import JsonResponse
 
 def index(request):
-    load_keras_model();
     return render(request, 'index.html');
-
-def post_test(request):
-    test = request.POST['test'];
-    #return render(request, 'index.html', context);
-    messages.add_message(request, messages.INFO, test, extra_tags="test")
-    return HttpResponseRedirect(reverse('digits:index'))
 
 def predict_image(request):
     if request.method == 'POST' and request.POST['digitImage']:
