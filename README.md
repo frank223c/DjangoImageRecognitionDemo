@@ -1,6 +1,7 @@
 # Reconocimiento de digitos escritos a mano con tensorflow
 
-Demo para reconocimiento de digitos escritos a mano usando Python, Keras Tensorflow y Django para el proyecto de Inteligencia Artificial
+Demo para reconocimiento de digitos escritos a mano usando Python, Keras Tensorflow y Django para el proyecto de Inteligencia Artificial.
+
 Para el entrenamiento de la red neuronal se utilizó el conjunto de datos de Mnist de digitos escritos a mano.
 
 ## Para empezar:
