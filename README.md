@@ -1,4 +1,4 @@
-# Reconocimiento de digitos escritos a mano con tensorflow
+# Reconocimiento de digitos escritos a mano con Keras Tensorflow
 
 Demo para reconocimiento de digitos escritos a mano usando redes neuronales convolucionales para el curso de Inteligencia Artificial UPC / EPE.
 
